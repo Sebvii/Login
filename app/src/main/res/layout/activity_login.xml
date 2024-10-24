@@ -104,5 +104,14 @@
             android:textSize="20sp"
             android:textStyle="italic|normal" />
 
+        <ImageView
+            android:id="@+id/google_sign_in_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:src="@drawable/google"
+            />
+
+
     </LinearLayout>
 </RelativeLayout>
