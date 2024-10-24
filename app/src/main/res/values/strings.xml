@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CV</string>
+    <string name="Email">Email</string>
+    <string name="pass">Password</string>
+    <string name="login">Log In</string>
+    <string name="Do_have_an_account_Login">Dont you have acoount? Register!</string>
+    <string name="Password">Password</string>
+</resources>
