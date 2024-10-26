@@ -22,8 +22,19 @@
         android:layout_centerInParent="true">
 
 
-
         <!-- Email Label and Input -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:fontFamily="@font/afacad"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:text="@string/Login"
+            android:textColor="#bdcaa1"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="326dp"
             android:layout_height="wrap_content"
@@ -68,9 +79,25 @@
                 android:maxLength="20"
                 android:singleLine="true"
                 android:textColor="@color/YGreen"/>
+
+           <!-- Initially hidden -->
+
         </com.google.android.material.textfield.TextInputLayout>
-
-
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/afacad"
+            android:onClick="onForgotPasswordClicked"
+            android:text="@string/forget"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="13.5sp"
+            android:textStyle="bold" />
 
         <!-- ProgressBar -->
         <ProgressBar
@@ -83,28 +110,32 @@
 
 
         <!-- Sign Up Button -->
+
+        <!-- Login Text -->
         <Button
             android:id="@+id/Loginbtn"
             android:layout_width="326dp"
+            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:background="@color/Green"
             android:padding="12dp"
             android:text="@string/login"
             android:textColor="@color/YGreen" />
 
-        <!-- Login Text -->
         <TextView
             android:id="@+id/loginNow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/afacad"
-            android:text="Dont You Have Account? Register"
+            android:text="@string/Sign"
             android:textColor="@color/YGreen"
             android:textSize="20sp"
             android:textStyle="italic|normal" />
+      <!-- Align to top -->
 
-        <ImageView
+
+        <Button
             android:id="@+id/google_sign_in_btn"
             android:layout_width="48dp"
             android:layout_height="48dp"

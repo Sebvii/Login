@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -30,31 +31,25 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.annotations.Nullable;
 
 import java.util.HashMap;
 
 public class login extends AppCompatActivity {
 
-
-    private EditText  txtEmail, LastPass;
+    private EditText txtEmail, LastPass;
     private Button Loginbtn;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
-    private TextView textViewLoginNow;
+    private TextView textViewLoginNow, forgotPassword;  // Added forgotPassword here
 
-   private Button google_sign_in_btn;
+    private Button google_sign_in_btn;
 
     FirebaseAuth firebaseAuth;
-
     FirebaseDatabase database;
 
     GoogleSignInOptions gso;
-
     GoogleSignInClient gsc;
     int RC_SIGN_IN = 20;
-
-
 
     @Override
     public void onStart() {
@@ -83,16 +78,17 @@ public class login extends AppCompatActivity {
 
         // Find Views
         txtEmail = findViewById(R.id.txtEmail);
-        LastPass = findViewById(R.id.LastPass);;
+        LastPass = findViewById(R.id.LastPass);
         Loginbtn = findViewById(R.id.Loginbtn);
         progressBar = findViewById(R.id.progressBar); // Initialize progressBar
         textViewLoginNow = findViewById(R.id.loginNow);
+        forgotPassword = findViewById(R.id.forgotPassword); // Initialize forgotPassword
 
         // Set Sign-Up button click listener
         Loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUpUser();
+                validatePassword();
             }
         });
 
@@ -104,7 +100,7 @@ public class login extends AppCompatActivity {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail().build();
 
-        gsc = GoogleSignIn.getClient(login.this,gso);
+        gsc = GoogleSignIn.getClient(login.this, gso);
 
         google_sign_in_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,11 +119,20 @@ public class login extends AppCompatActivity {
             }
         });
 
+        // Set up forgot password functionality
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(login.this, forgetpass.class);
+                startActivity(intent);
+            }
+        });
+
         // Find VideoView by its ID
         VideoView videoView = findViewById(R.id.videoViewBackground);
 
         // Set the video path (video file in res/raw/main_background.mp4)
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bg1); // resource name should be lowercase
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.background); // resource name should be lowercase
         videoView.setVideoURI(uri);
 
         // Start the video and loop it
@@ -136,55 +141,8 @@ public class login extends AppCompatActivity {
             videoView.start();    // Start the video
         });
     }
-    private void signIn() {
-        Intent signInIntent = gsc.getSignInIntent();
-        startActivityForResult(signInIntent,RC_SIGN_IN);
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN){
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuth(account.getIdToken());
-            }catch (Exception e){
-                Toast.makeText(this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
-            }
-
-        }
-    }
-
-    private void firebaseAuth(String idToken) {
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            HashMap<String, Object> map = new HashMap<>();
-                            map.put("id",user.getUid());
-                            map.put("name",user.getDisplayName());
-                            map.put("profile",user.getPhotoUrl().toString());
-                            database.getReference().child("userss").child(user.getUid()).setValue(map);
-
-                            Intent intent = new Intent(login.this, HomePage.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Toast.makeText(login.this, "Something Went Wrong!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
-    private void signUpUser() {
-        // Get user input
+    private void validatePassword() {
         String email = txtEmail.getText().toString().trim();
         String password = LastPass.getText().toString().trim();
 
@@ -204,9 +162,83 @@ public class login extends AppCompatActivity {
             LastPass.requestFocus();
             return;
         }
-        // Show progressBar while signing up
+
+        // Simulate a password check (replace this with your actual validation logic)
+        if (!isValidPassword(password)) {
+            // Show the "Forgot Password?" message
+            forgotPassword.setVisibility(View.VISIBLE);
+        } else {
+            // Handle login
+            signInWithEmail(email, password);
+        }
+    }
+
+    private boolean isValidPassword(String password) {
+        // Replace with actual password validation logic
+        return password.equals("yourCorrectPassword"); // Example comparison
+    }
+
+    private void signInWithEmail(String email, String password) {
+        // Show progressBar while signing in
         progressBar.setVisibility(View.VISIBLE);
 
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Intent intent = new Intent(login.this, HomePage.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // If sign-in fails, display a message to the user.
+                        Toast.makeText(login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                    }
+                    progressBar.setVisibility(View.GONE); // Hide progressBar after operation
+                });
+    }
 
+    private void signIn() {
+        Intent signInIntent = gsc.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuth(account.getIdToken());
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void firebaseAuth(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put("id", user.getUid());
+                            map.put("name", user.getDisplayName());
+                            map.put("profile", user.getPhotoUrl().toString());
+                            database.getReference().child("userss").child(user.getUid()).setValue(map);
+
+                            Intent intent = new Intent(login.this, HomePage.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(login.this, "Something Went Wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

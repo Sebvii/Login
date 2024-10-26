@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- Title for the interface -->
@@ -19,7 +20,8 @@
         android:layout_height="279dp"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="ExtraText">
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,11 +54,13 @@ please sign up first."
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/btnlogin"
             android:fontFamily="@font/afacad"
             android:text="Log In"
+            android:backgroundTint="#ACB992"
+            android:textSize="18sp"
             android:textColor="#362706"
-            android:textSize="18sp" />
+            android:background="@drawable/btnlogin" />
+
 
         <!-- Sign In Button -->
         <Button

@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         getstartbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Secondpage.class);
+                Intent intent = new Intent(MainActivity.this, login.class);
                 startActivity(intent);
             }
         });
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         VideoView videoView = findViewById(R.id.videoViewBackground);
 
         // Set the video path (video file in res/raw/main_background.mp4)
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bg1); // resource name should be lowercase
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.background); // resource name should be lowercase
         videoView.setVideoURI(uri);
 
         // Start the video and loop it

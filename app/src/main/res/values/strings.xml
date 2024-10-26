@@ -5,4 +5,13 @@
     <string name="login">Log In</string>
     <string name="Do_have_an_account_Login">Dont you have acoount? Register!</string>
     <string name="Password">Password</string>
+    <string name="txtlogin">Login</string>
+    <string name="Login">Log In</string>
+    <string name="forgot">The password you’ve entered is incorrect. Forgot password?</string>
+    <string name="Sign">Dont You Have Account? Register</string>
+    <string name="forget">Forget Password?</string>
+    <string name="reset">Reset Password</string>
+    <string name="email">Enter Your Email\n</string>
+    <string name="text">Please enter your email to reset the password</string>
+    <string name="tixt">Forgot Password</string>
 </resources>
